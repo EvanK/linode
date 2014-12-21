@@ -39,7 +39,7 @@ RESOURCE = "000000"
 #
 KEY = "abcdefghijklmnopqrstuvwxyz"
 #
-# The URI of a Web service that returns your IP address as plaintext.  You are
+# The URI of a Web service that returns your IP address.  You are
 # welcome to leave this at the default value and use mine.  If you want to run
 # your own, the source code of that script is:
 #
@@ -47,7 +47,7 @@ KEY = "abcdefghijklmnopqrstuvwxyz"
 #     header("Content-type: text/plain");
 #     printf("%s", $_SERVER["REMOTE_ADDR"]);
 #
-GETIP = "http://hosted.jedsmith.org/ip.php"
+GETIP = "http://httpbin.org/ip"
 #
 # If for some reason the API URI changes, or you wish to send requests to a
 # different URI for debugging reasons, edit this.  {0} will be replaced with the
@@ -86,6 +86,8 @@ try:
 	from json import load
 	from urllib.parse import urlencode
 	from urllib.request import urlretrieve
+	from re import search
+
 except Exception as excp:
 	exit("Couldn't import the standard library. Are you running Python 3?")
 
@@ -118,7 +120,7 @@ def ip():
 		print(headers, end="")
 		print(open(file).read())
 		print()
-	return open(file).read().strip()
+	return search("^[\s\S]*((?:\d{2,3}\.){3}\d{2,3})[\s\S]*$", open(file).read()).group(1)
 
 def main():
 	try:
